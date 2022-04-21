@@ -74,3 +74,19 @@ a:hover{
 nav{
  
 }
+
+.bottom{
+  width:90vw;
+}
+
+.date{
+  height: 5vw;;
+  font-size: larger;
+}
+
+.dateButton{
+  margin-top: 1vw;
+  height: 5vw;
+  width: 20vw;  
+  font-size: 2rem;
+}

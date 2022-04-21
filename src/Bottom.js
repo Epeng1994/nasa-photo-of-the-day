@@ -5,7 +5,7 @@ import "./App.css";
 function Bottom(props){
 
     return(
-        <div>
+        <div className = 'bottom'>
             <p>{props.info}</p>
         </div>
     )
