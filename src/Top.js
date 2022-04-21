@@ -6,6 +6,7 @@ function TOP(props){
 
     function check(){
        props.newDate(document.querySelector('#calender').value)
+       
     }
 
     return(

@@ -15,20 +15,24 @@ function App() {
   const [today,setToday] = useState()
   const [date, setDate] = useState('')
 
-  function newDate(date){
-    setDate('&date='+date)
+  function newDate(newDate){
+    setDate('&date='+newDate)
   }
   
 
   useEffect(()=>{
     axios.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY' + date)
     .then(res => {
+      console.log(res)
       setPic(res.data.url)
       setInfo(res.data.explanation)
       setTitle(res.data.title)
       setToday(res.data.date)
     })
-    .catch(err => {console.log('Uh Oh')})
+    .catch(err => {
+      setTitle('Either no image available for date or exceeded key amount')
+      console.log('no',err.data)
+    })
   },[date])
 
 
@@ -36,7 +40,7 @@ function App() {
 
     <div className="App App-header" >
       <div className = 'container'>
-        <img className='star' src='./starfall-gif-51.gif'/>
+        <img className='star' src='./starfall-gif-51.gif' alt= 'starry night'/>
         <img src='./logo512.png' alt='some logo' className = 'App-logo'/>
       </div>
       <Top newDate = {newDate}/>
