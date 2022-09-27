@@ -1,7 +1,7 @@
 import React, {useState,useEffect} from "react";
 import "./App.css";
 import axios from 'axios'
-import APOD from "./components/APOD.js"
+import APODImage from "./components/APODImage.js"
 import styled from 'styled-components'
 
 const Filler = styled.div`
@@ -10,44 +10,41 @@ const Filler = styled.div`
   background-color: #282c34;
   background-image: url('./starfall.gif');
 `
-const LoadText = styled.p`
-  width:80vw;
-  font-size:2vw;
-  top:30vw;
-  margin-left:10vw;
-`
-
-
 function App() {
 
   const [apodState, setApodState] = useState({
-    pic:'',
+    url:'',
     info:'',
     title:'',
     today:'',
     date:'',
+    media_type:'',
     load:false
   })
+
+  const apodCache = []
  
   useEffect(()=>{
     axios.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY' + apodState.date)
     .then(res => {
+      console.log(res)
       setApodState({
-        pic:res.data.url,
+        media_type:res.data.media_type,
+        url:res.data.url,
         info:res.data.explanation,
         title:res.data.title,
         today:res.data.date,
-        date:'',
         load:false
       })
     })
     .catch(err => {
       setApodState({
-        pic:'./space.gif',
+        url:'./space.gif',
         info:'',
         title:'',
         today:'',
         date:'',
+        media_type:'image',
         load:true
       })
     })
@@ -64,14 +61,14 @@ function App() {
     <div className="App App-header" >
       <div className = 'container'>
         <Filler>
-          <img src='./logo512.png' alt='some logo' className = 'App-logo'/>
+          <img src='./nasa-logo-web-rgb.png' alt='some logo' className = 'App-logo'/>
         </Filler>
       </div>
       <div>
          <input id = 'calender' type='date' onChange={dateUpdate} />  
       </div>
-      {apodState.load ? <LoadText>There's no APOD for that date yet or exceeded DEMO keys. Please come back later.</LoadText> : null}
-      <APOD imgText = {apodState.pic} title = {apodState.title} today={apodState.today} info = {apodState.info}/>
+      {apodState.load ? <p className = 'loadText'>There's no APOD for that date yet or exceeded DEMO keys. Please come back later.</p> : null}
+      <APODImage media_type = {apodState.media_type} url = {apodState.url} title = {apodState.title} today={apodState.today} info = {apodState.info}/>
     </div>
   );
 }

@@ -55,4 +55,38 @@ html{
   top:0;
 }
 
+.divWrapper{
+  width:80vw;
+  font-size: 30px;
+  margin-left:10vw;
+}
 
+.apod{
+  width: 60vw;
+  height:30vw;
+}
+
+@keyframes apodKeyFrame{
+  0%{
+    opacity: 0;
+  }
+  100%{
+      opacity:1;
+  }
+}
+
+.apodWrapper{
+  opacity: 1;
+  animation: apodKeyFrame 1.5s ease-in-out;
+}
+
+.infoText{
+  font-size:1.5vw;
+}
+
+.loadText{
+  width:80vw;
+  font-size:2vw;
+  top:30vw;
+  margin-left:10vw;
+}
