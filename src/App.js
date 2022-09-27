@@ -11,21 +11,53 @@ const Filler = styled.div`
   background-image: url('./starfall.gif');
 `
 function App() {
-
+  const currentDate = new Date().toISOString().slice(0, 10)
   const [apodState, setApodState] = useState({
     url:'',
     info:'',
     title:'',
-    today:'',
-    date:'',
     media_type:'',
     load:false
   })
+  const [apodDate, setApodDate] = useState(currentDate)
 
-  const apodCache = []
+  //const apodCache = []
  
   useEffect(()=>{
-    axios.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY' + apodState.date)
+    const urlLink = `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${apodDate}`
+    axios.get(urlLink)
+    .then(res => {
+      console.log(res)
+      setApodState({
+        media_type:res.data.media_type,
+        url:res.data.url,
+        info:res.data.explanation,
+        title:res.data.title,
+        load:false
+      })
+    })
+    .catch(err => {
+      setApodState({
+        url:'./space.gif',
+        info:'',
+        title:'',
+        today:'',
+        media_type:'image',
+        load:true
+      })
+    })
+    .catch(err => {
+      setApodState({...apodState, title:'Either no image available for date or exceeded key amount'})
+    })
+  },[apodDate])
+
+  const dateUpdate= e=>{
+    setApodDate(e.target.value)
+  }
+
+  const dateSubmit = e=>{
+    e.preventDefault();
+    axios.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=' + apodState.today)
     .then(res => {
       console.log(res)
       setApodState({
@@ -43,7 +75,6 @@ function App() {
         info:'',
         title:'',
         today:'',
-        date:'',
         media_type:'image',
         load:true
       })
@@ -51,10 +82,6 @@ function App() {
     .catch(err => {
       setApodState({...apodState, title:'Either no image available for date or exceeded key amount'})
     })
-  },[apodState.date])
-
-  const dateUpdate= e=>{
-    setApodState({...apodState, date: `&date=${e.target.value}`})
   }
  
   return(
@@ -67,6 +94,7 @@ function App() {
       <div>
          <input id = 'calender' type='date' onChange={dateUpdate} />  
       </div>
+      <button onClick = {()=>dateSubmit()}>Submit</button>
       {apodState.load ? <p className = 'loadText'>There's no APOD for that date yet or exceeded DEMO keys. Please come back later.</p> : null}
       <APODImage media_type = {apodState.media_type} url = {apodState.url} title = {apodState.title} today={apodState.today} info = {apodState.info}/>
     </div>
