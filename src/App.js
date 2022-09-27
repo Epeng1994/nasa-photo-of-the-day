@@ -92,7 +92,7 @@ function App() {
         </Filler>
       </div>
       <div>
-         <input id = 'calender' type='date' onChange={dateUpdate} />  
+         <input id = 'calender' type='date' onChange={dateUpdate} value = {currentDate}/>  
       </div>
       <button onClick = {()=>dateSubmit()}>Submit</button>
       {apodState.load ? <p className = 'loadText'>There's no APOD for that date yet or exceeded DEMO keys. Please come back later.</p> : null}
