@@ -1,13 +1,8 @@
 import React from "react";
-import "./App.css";
+import "../App.css";
 import styled, {keyframes} from 'styled-components'
 
-
-
-
-function APOD(props){
-
-    const DivWrapper = styled.div`
+const DivWrapper = styled.div`
         width:80vw;
         font-size: 30px;
         margin-left:10vw;
@@ -31,6 +26,8 @@ function APOD(props){
     const InfoText = styled.p`
         font-size:1.5vw;
     `
+
+function APOD(props){
     return(
         <ApodWrapper>
             <p>{props.title} {props.today}</p>

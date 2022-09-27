@@ -1,9 +1,7 @@
 import React, {useState,useEffect} from "react";
 import "./App.css";
-import Top from "./Top.js"
 import axios from 'axios'
-import APOD from "./APOD.js"
-import Bottom from "./Bottom.js"
+import APOD from "./components/APOD.js"
 import styled from 'styled-components'
 
 const Filler = styled.div`
@@ -12,7 +10,6 @@ const Filler = styled.div`
   background-color: #282c34;
   background-image: url('./starfall.gif');
 `
-
 const LoadText = styled.p`
   width:80vw;
   font-size:2vw;
@@ -23,54 +20,58 @@ const LoadText = styled.p`
 
 function App() {
 
-  const [pic,setPic] = useState()
-  const [info,setInfo] = useState()
-  const [title,setTitle] = useState()
-  const [today,setToday] = useState()
-  const [date, setDate] = useState('')
-  const [load,setLoad] = useState(false)
-
-  function newDate(newDate){
-    setDate('&date='+newDate)
-  }
-  
-
+  const [apodState, setApodState] = useState({
+    pic:'',
+    info:'',
+    title:'',
+    today:'',
+    date:'',
+    load:false
+  })
+ 
   useEffect(()=>{
-    axios.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY' + date)
+    axios.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY' + apodState.date)
     .then(res => {
-      setPic(res.data.url)
-      setInfo(res.data.explanation)
-      setTitle(res.data.title)
-      setToday(res.data.date)
-      setLoad(false)
+      setApodState({
+        pic:res.data.url,
+        info:res.data.explanation,
+        title:res.data.title,
+        today:res.data.date,
+        date:'',
+        load:false
+      })
     })
     .catch(err => {
-      setLoad(true)
-      setPic('./space.gif')
-      setInfo('')
-      setTitle('')
-      setToday('')
-      setLoad(true)
+      setApodState({
+        pic:'./space.gif',
+        info:'',
+        title:'',
+        today:'',
+        date:'',
+        load:true
+      })
     })
     .catch(err => {
-      setTitle('Either no image available for date or exceeded key amount')
-      console.log('no',err.data)
+      setApodState({...apodState, title:'Either no image available for date or exceeded key amount'})
     })
-  },[date])
+  },[apodState.date])
 
-
+  const dateUpdate= e=>{
+    setApodState({...apodState, date: `&date=${e.target.value}`})
+  }
+ 
   return(
-
     <div className="App App-header" >
       <div className = 'container'>
         <Filler>
           <img src='./logo512.png' alt='some logo' className = 'App-logo'/>
         </Filler>
       </div>
-      <Top newDate = {newDate}/>
-      {load ? <LoadText>There's no APOD for that date yet or exceeded DEMO keys. Please come back later.</LoadText> : null}
-      <APOD imgText = {pic} title = {title} today={today} info = {info}/>
-      <Bottom />
+      <div>
+         <input id = 'calender' type='date' onChange={dateUpdate} />  
+      </div>
+      {apodState.load ? <LoadText>There's no APOD for that date yet or exceeded DEMO keys. Please come back later.</LoadText> : null}
+      <APOD imgText = {apodState.pic} title = {apodState.title} today={apodState.today} info = {apodState.info}/>
     </div>
   );
 }
