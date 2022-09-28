@@ -90,3 +90,14 @@ html{
   top:30vw;
   margin-left:10vw;
 }
+
+.filler{
+  height:15vw;
+  width: 100vw;
+  background-color: #282c34;
+  background-image: url('../public/starfall.gif');
+}
+
+.submitButton{
+  width:10vw;
+}
